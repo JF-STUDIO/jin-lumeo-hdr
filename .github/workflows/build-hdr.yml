@@ -26,8 +26,8 @@ jobs:
         if: failure()
         run: |
           pwd && ls -la .grype.yaml || true
-          grype ghcr.io/jf-studio/jin-lumeo-hdr:latest -o table --fail-on high; echo 'BARE_EXIT='$?
-          grype docker:ghcr.io/jf-studio/jin-lumeo-hdr:latest -o table --fail-on high; echo 'DOCKER_EXIT='$?
+          grype ghcr.io/jf-studio/jin-lumeo-hdr:latest -o table --fail-on high --config .grype.yaml; echo 'BARE_EXIT='$?
+          grype docker:ghcr.io/jf-studio/jin-lumeo-hdr:latest -o table --fail-on high --config .grype.yaml; echo 'DOCKER_EXIT='$?
       - name: Push image to GHCR
         run: |
           echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
