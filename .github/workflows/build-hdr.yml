@@ -20,12 +20,11 @@ jobs:
           curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh -s -- -b /usr/local/bin
       - name: Build, scan and evidence HDR image
         env:
-          HDR_BASE_IMAGE: python:3.12.13-slim-bookworm@sha256:d50fb7611f86d04a3b0471b46d7557818d88983fc3136726336b2a4c657aa30b
+          HDR_BASE_IMAGE: python:3.13.14-slim-trixie@sha256:6771159cd4fa5d9bba1258caf0b82e6b73458c694d178ad97c5e925c2d0e1a91
         run: node scripts/hdr-container-evidence.mjs --build
       - name: Show grype details on failure
         if: failure()
         run: |
-          docker images | grep jin-lumeo-hdr || true
           grype docker:ghcr.io/jf-studio/jin-lumeo-hdr:latest -o table || true
       - name: Push image to GHCR
         run: |
