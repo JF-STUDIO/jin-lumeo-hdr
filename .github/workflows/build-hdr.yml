@@ -22,6 +22,10 @@ jobs:
         env:
           HDR_BASE_IMAGE: python:3.12.13-slim-bookworm@sha256:d50fb7611f86d04a3b0471b46d7557818d88983fc3136726336b2a4c657aa30b
         run: node scripts/hdr-container-evidence.mjs --build
+      - name: Show grype details on failure
+        if: failure()
+        run: |
+          grype ghcr.io/jf-studio/jin-lumeo-hdr:latest -o table || true
       - name: Push image to GHCR
         run: |
           echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
