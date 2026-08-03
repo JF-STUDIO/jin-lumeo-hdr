@@ -94,9 +94,22 @@ async def run(request: Request) -> JSONResponse:
         return JSONResponse({"error": "INTERNAL_ERROR"}, status_code=500)
 
 
-if __name__ == "__main__":
-    import uvicorn
+def handler(event: dict[str, Any]) -> dict[str, Any]:
+    """RunPod SDK queue-mode handler; the platform delivers {"input": dispatch}."""
+    return handle_event(event)
 
-    threading.Thread(target=start_health_server, daemon=True).start()
-    print(f"starting business server on {PORT}, health server on {PORT_HEALTH}", flush=True)
-    uvicorn.run(app, host="0.0.0.0", port=PORT, log_level="info")
+
+if __name__ == "__main__":
+    if os.environ.get("RUNPOD_WEBHOOK_GET_JOB"):
+        # Queue-based serverless: let the RunPod SDK poll jobs for us.
+        import runpod
+
+        print("starting runpod SDK queue worker", flush=True)
+        runpod.serverless.start({"handler": handler})
+    else:
+        # Load-balancer mode: serve HTTP directly.
+        import uvicorn
+
+        threading.Thread(target=start_health_server, daemon=True).start()
+        print(f"starting business server on {PORT}, health server on {PORT_HEALTH}", flush=True)
+        uvicorn.run(app, host="0.0.0.0", port=PORT, log_level="info")
