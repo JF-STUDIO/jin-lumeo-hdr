@@ -21,8 +21,8 @@ WORKDIR /opt/hdr-worker
 COPY workers/hdr/requirements.lock ./requirements.lock
 RUN python -m pip install --no-cache-dir --disable-pip-version-check --require-hashes -r requirements.lock
 
-COPY --chown=hdrworker:hdrworker workers/hdr/multibrand_hdr.py workers/hdr/serverless_worker.py workers/hdr/handler.py ./
+COPY --chown=hdrworker:hdrworker workers/hdr/multibrand_hdr.py workers/hdr/serverless_worker.py workers/hdr/handler.py workers/hdr/http_server.py ./
 RUN mkdir -p /tmp/jin-lumeo-hdr && chown hdrworker:hdrworker /tmp/jin-lumeo-hdr
 
 USER hdrworker
-ENTRYPOINT ["sh", "-c", "exec python -u handler.py"]
+ENTRYPOINT ["sh", "-c", "exec python -u http_server.py"]
