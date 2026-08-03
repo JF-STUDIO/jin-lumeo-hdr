@@ -1,0 +1,24 @@
+# Grype vulnerability suppressions for the HDR worker container image.
+# Every entry is documented: why it is not actionable in this deployment.
+ignore:
+  # Bundled inside opencv-python-headless for video codec I/O. The HDR worker
+  # only decodes RAW/JPEG/TIFF stills; no video path exists, so the ffmpeg
+  # findings are not exploitable here.
+  - vulnerability: CVE-2023-49502
+  - vulnerability: CVE-2023-50010
+  - vulnerability: CVE-2026-8461
+  - vulnerability: CVE-2026-64834
+  - vulnerability: CVE-2025-1594
+  # Debian stable packages that Debian marks "won't fix" (no backport). The
+  # container runs Debian bookworm/trixie because rawpy/opencv manylinux wheels
+  # require a glibc-based distro.
+  - vulnerability: CVE-2026-5450
+  - vulnerability: CVE-2026-8376
+  - vulnerability: CVE-2026-13221
+  - vulnerability: CVE-2026-42496
+  - vulnerability: CVE-2025-69720
+  # CPython 3.13 binary findings that are fixed only in 3.15. rawpy and
+  # opencv-python-headless have no cp315 wheels, so this image is pinned to
+  # the newest patched 3.13 release until compatible wheels exist.
+  - vulnerability: CVE-2026-11940
+  - vulnerability: CVE-2026-15308
