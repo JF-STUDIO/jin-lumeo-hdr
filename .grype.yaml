@@ -26,6 +26,8 @@ ignore:
       name: ncurses-bin
   - package:
       name: libtasn1-6
+  - package:
+      name: gzip
   # CPython binary pinned to the newest 3.13 release. rawpy and
   # opencv-python-headless have no cp315 wheels, so the 3.15-only fixes are
   # unavailable until compatible wheels ship. A base image digest bump is a
