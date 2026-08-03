@@ -1,0 +1,10 @@
+numpy==2.0.2 \
+    --hash=sha256:0123ffdaa88fa4ab64835dcbde75dcdf89c453c922f18dced6e27c90d1d0ec5a
+opencv-python-headless==4.10.0.84 \
+    --hash=sha256:377d08a7e48a1405b5e84afcbe4798464ce7ee17081c1c23619c8b398ff18295
+Pillow==10.4.0 \
+    --hash=sha256:bf2342ac639c4cf38799a44950bbc2dfcb685f052b9e262f446482afaf4bffca
+rawpy==0.27.0 \
+    --hash=sha256:2262088bd4fd768edd7576857a9215cfff5e84d61942336401ee5d9ca8f677e0
+tifffile==2024.8.30 \
+    --hash=sha256:8bc59a8f02a2665cd50a910ec64961c5373bee0b8850ec89d3b7b485bf7be7ad
