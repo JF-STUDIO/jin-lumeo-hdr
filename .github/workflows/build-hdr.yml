@@ -31,4 +31,6 @@ jobs:
       - name: Push image to GHCR
         run: |
           echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
+          docker tag ghcr.io/jf-studio/jin-lumeo-hdr:latest ghcr.io/jf-studio/jin-lumeo-hdr:sha-${GITHUB_SHA:0:8}
           docker push ghcr.io/jf-studio/jin-lumeo-hdr:latest
+          docker push ghcr.io/jf-studio/jin-lumeo-hdr:sha-${GITHUB_SHA:0:8}
