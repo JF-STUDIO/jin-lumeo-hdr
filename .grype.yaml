@@ -34,3 +34,15 @@ ignore:
   # reviewed manual step whenever a new 3.13 patch is published.
   - package:
       name: python
+  # sqlite3 from the pinned Debian trixie base. The HDR worker is a Python
+  # still-image processor that never opens SQLite databases or parses SQL, so
+  # the CVE-2026-11822/11824 heap-overflow paths in SQL processing are not
+  # reachable. Debian marks them "(won't fix)"; upgrading would break the
+  # pinned glibc manylinux wheel compatibility.
+  - package:
+      name: libsqlite3-0
+  # POSIX ACL utilities from the base image. The worker runs as a single
+  # unprivileged process in a private container and never manages file ACLs;
+  # CVE-2026-54369/54370 are not exploitable in this deployment.
+  - package:
+      name: libacl1
