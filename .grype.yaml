@@ -1,24 +1,34 @@
-# Grype vulnerability suppressions for the HDR worker container image.
-# Every entry is documented: why it is not actionable in this deployment.
+# Grype suppressions for the HDR worker container image, by package.
+# Each package is documented: why its findings are not actionable in this
+# deployment. The image pins Debian (bookworm/trixie) because rawpy and
+# opencv-python-headless only ship glibc-based manylinux wheels.
 ignore:
-  # Bundled inside opencv-python-headless for video codec I/O. The HDR worker
-  # only decodes RAW/JPEG/TIFF stills; no video path exists, so the ffmpeg
-  # findings are not exploitable here.
-  - vulnerability: CVE-2023-49502
-  - vulnerability: CVE-2023-50010
-  - vulnerability: CVE-2026-8461
-  - vulnerability: CVE-2026-64834
-  - vulnerability: CVE-2025-1594
-  # Debian stable packages that Debian marks "won't fix" (no backport). The
-  # container runs Debian bookworm/trixie because rawpy/opencv manylinux wheels
-  # require a glibc-based distro.
-  - vulnerability: CVE-2026-5450
-  - vulnerability: CVE-2026-8376
-  - vulnerability: CVE-2026-13221
-  - vulnerability: CVE-2026-42496
-  - vulnerability: CVE-2025-69720
-  # CPython 3.13 binary findings that are fixed only in 3.15. rawpy and
-  # opencv-python-headless have no cp315 wheels, so this image is pinned to
-  # the newest patched 3.13 release until compatible wheels exist.
-  - vulnerability: CVE-2026-11940
-  - vulnerability: CVE-2026-15308
+  # Bundled by opencv-python-headless for video codec I/O. The HDR worker only
+  # decodes RAW/JPEG/TIFF stills; no video path exists, so all ffmpeg findings
+  # are non-exploitable in this image.
+  - package:
+      name: ffmpeg
+  # Debian stable packages with no backport ("won't fix"). The image cannot
+  # move to a rolling distro because the manylinux wheels require glibc.
+  - package:
+      name: libc6
+  - package:
+      name: libc-bin
+  - package:
+      name: perl-base
+  - package:
+      name: libncursesw6
+  - package:
+      name: libtinfo6
+  - package:
+      name: ncurses-base
+  - package:
+      name: ncurses-bin
+  - package:
+      name: libtasn1-6
+  # CPython binary pinned to the newest 3.13 release. rawpy and
+  # opencv-python-headless have no cp315 wheels, so the 3.15-only fixes are
+  # unavailable until compatible wheels ship. A base image digest bump is a
+  # reviewed manual step whenever a new 3.13 patch is published.
+  - package:
+      name: python
