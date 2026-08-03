@@ -1,10 +1,10 @@
-numpy==2.0.2 \
-    --hash=sha256:0123ffdaa88fa4ab64835dcbde75dcdf89c453c922f18dced6e27c90d1d0ec5a
-opencv-python-headless==4.10.0.84 \
-    --hash=sha256:377d08a7e48a1405b5e84afcbe4798464ce7ee17081c1c23619c8b398ff18295
-Pillow==10.4.0 \
-    --hash=sha256:bf2342ac639c4cf38799a44950bbc2dfcb685f052b9e262f446482afaf4bffca
+numpy==2.2.6 \
+    --hash=sha256:1bc23a79bfabc5d056d106f9befb8d50c31ced2fbc70eedb8155aec74a45798f
+opencv-python-headless==4.12.0.88 \
+    --hash=sha256:236c8df54a90f4d02076e6f9c1cc763d794542e886c576a6fee46ec8ff75a7a9
+Pillow==12.2.0 \
+    --hash=sha256:03f6fab9219220f041c74aeaa2939ff0062bd5c364ba9ce037197f4c6d498cd9
 rawpy==0.27.0 \
-    --hash=sha256:2262088bd4fd768edd7576857a9215cfff5e84d61942336401ee5d9ca8f677e0
+    --hash=sha256:45b1b08a8d6fdc0139fea4c1389c17cb6f3d01b0581e71eef1337949a486550c
 tifffile==2024.8.30 \
     --hash=sha256:8bc59a8f02a2665cd50a910ec64961c5373bee0b8850ec89d3b7b485bf7be7ad
