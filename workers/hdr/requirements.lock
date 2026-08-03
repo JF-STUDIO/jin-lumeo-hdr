@@ -7,4 +7,6 @@ Pillow==12.3.0 \
 rawpy==0.27.0 \
     --hash=sha256:45b1b08a8d6fdc0139fea4c1389c17cb6f3d01b0581e71eef1337949a486550c
 tifffile==2024.8.30 \
-    --hash=sha256:8bc59a8f02a2665cd50a910ec64961c5373bee0b8850ec89d3b7b485bf7be7ad
+    --hash=sha256:8bc59a8f02a2665cd50a910ec64961c5373bee0b8850ec89d3b7b485bf7be7ad \
+runpod==1.11.0 \
+    --hash=sha256:0dadf07859fc3f46505c99bff582282240f5978d9e87df92c1b5f132dbbeedbe
