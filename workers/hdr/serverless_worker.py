@@ -35,7 +35,7 @@ from urllib.parse import unquote, urlsplit
 from PIL import Image
 
 
-IDENTIFIER = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_-]{2,127}$")
+IDENTIFIER = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_:.-]{2,255}$")
 SHA256 = re.compile(r"^[0-9a-f]{64}$")
 SUPPORTED_INPUTS = {".cr2", ".cr3", ".nef", ".nrw", ".arw", ".raf"}
 
@@ -570,6 +570,7 @@ class HdrWorker:
         names: set[str] = set()
         object_identities: set[tuple[str, str]] = set()
         input_prefix = f"users/{dispatch['tenantId']}/projects/{dispatch['projectId']}/originals/"
+        opaque_input_prefix = "objects/v1/"
         for item in inputs:
             if not isinstance(item, dict) or set(("objectKey", "versionId", "filename", "bytes", "sha256", "width", "height", "exposureBias", "downloadUrl", "urlExpiresAt")) - set(item):
                 raise WorkerError("INPUT_INVALID")
@@ -595,7 +596,7 @@ class HdrWorker:
             dimensions.add((item["width"], item["height"]))
             exposures.add(round(float(item["exposureBias"]), 6))
             total += item["bytes"]
-            self._validate_key_prefix(item["objectKey"], input_prefix)
+            self._validate_key_prefix(item["objectKey"], input_prefix, opaque_input_prefix)
             self._validate_object_url(item["downloadUrl"], item["objectKey"])
             self._validate_url_expiry(item, manifest["expiresAt"])
         if len(exposures) < 2:
@@ -644,8 +645,13 @@ class HdrWorker:
         if not isinstance(expiry, int) or expiry < self.now_ms() or expiry > manifest_expiry:
             raise WorkerError("URL_EXPIRED")
 
-    def _validate_key_prefix(self, key: str, prefix: str) -> None:
-        if not isinstance(key, str) or not key.startswith(prefix) or ".." in Path(key).parts or key.startswith("/"):
+    def _validate_key_prefix(self, key: str, *prefixes: str) -> None:
+        # Upload storage keys are opaque objects/v1/<64-hex> identities bound
+        # to the tenant/project through control-plane evidence. Legacy
+        # users/.../originals/ keys are accepted for compatibility only.
+        if not isinstance(key, str) or key.startswith("/") or ".." in Path(key).parts:
+            raise WorkerError("IDENTITY_MISMATCH")
+        if not any(key.startswith(prefix) for prefix in prefixes):
             raise WorkerError("IDENTITY_MISMATCH")
 
     def _validate_object_url(self, url: str, object_key: str) -> None:
