@@ -25,7 +25,8 @@ jobs:
       - name: Show grype details on failure
         if: failure()
         run: |
-          grype ghcr.io/jf-studio/jin-lumeo-hdr:latest -o table || true
+          docker images | grep jin-lumeo-hdr || true
+          grype docker:ghcr.io/jf-studio/jin-lumeo-hdr:latest -o table || true
       - name: Push image to GHCR
         run: |
           echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
