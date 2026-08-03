@@ -22,10 +22,12 @@ jobs:
         env:
           HDR_BASE_IMAGE: python:3.13.14-slim-trixie@sha256:6771159cd4fa5d9bba1258caf0b82e6b73458c694d178ad97c5e925c2d0e1a91
         run: node scripts/hdr-container-evidence.mjs --build
-      - name: Show grype details on failure
+      - name: Compare grype source resolution
         if: failure()
         run: |
-          grype docker:ghcr.io/jf-studio/jin-lumeo-hdr:latest -o table || true
+          pwd && ls -la .grype.yaml || true
+          grype ghcr.io/jf-studio/jin-lumeo-hdr:latest -o table --fail-on high; echo 'BARE_EXIT='$?
+          grype docker:ghcr.io/jf-studio/jin-lumeo-hdr:latest -o table --fail-on high; echo 'DOCKER_EXIT='$?
       - name: Push image to GHCR
         run: |
           echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
