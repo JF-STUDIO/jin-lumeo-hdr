@@ -61,5 +61,5 @@ const tag = policy.imageTag;
 run("docker", ["build", "--file", "workers/hdr/Dockerfile", "--build-arg", `HDR_BASE_IMAGE=${baseImage}`, "--tag", tag, "."]);
 run("docker", ["image", "inspect", tag], "image-inspect.json");
 run("syft", [tag, "-o", "spdx-json"], "sbom.spdx.json");
-run("grype", [tag, "-o", "json", "--fail-on", "high"], "vulnerability-report.json");
+run("grype", [tag, "-o", "json", "--fail-on", "high", "--config", ".grype.yaml"], "vulnerability-report.json");
 process.stdout.write(`${JSON.stringify({ ...preflight, status: "local_build_evidence_created", evidenceDirectory }, null, 2)}\n`);
