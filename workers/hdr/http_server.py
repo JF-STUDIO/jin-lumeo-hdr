@@ -37,7 +37,7 @@ def configured_worker() -> HdrWorker:
 
 
 def handle_event(event: dict[str, Any], worker: HdrWorker | None = None) -> dict[str, Any]:
-    if not isinstance(event, dict) or set(event) - {"id", "input", "webhook", "policy"} or not isinstance(event.get("input"), dict):
+    if not isinstance(event, dict) or not isinstance(event.get("input"), dict):
         raise RuntimeError("REQUEST_INVALID")
     try:
         return (worker or configured_worker()).process(event["input"])
